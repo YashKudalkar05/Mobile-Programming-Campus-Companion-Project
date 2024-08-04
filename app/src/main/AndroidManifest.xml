@@ -23,6 +23,8 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".EventsActivity"
                   android:parentActivityName=".MainActivity"/>
+        <activity android:name=".AddEventActivity"
+            android:parentActivityName=".EventsActivity"/>
         <activity android:name=".StudyGroupsActivity"
                   android:parentActivityName=".MainActivity"/>
         <activity android:name=".NavigationActivity"
