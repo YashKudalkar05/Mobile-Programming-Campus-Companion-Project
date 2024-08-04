@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "518093057746",
+    "project_id": "campus-companion-12125",
+    "storage_bucket": "campus-companion-12125.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518093057746:android:b1be580986a42756f8c70b",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM8loeZ3NXE8JT1csd0y753I-OdDsZTYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
