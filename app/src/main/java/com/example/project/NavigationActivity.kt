@@ -57,6 +57,27 @@ class NavigationActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(campusLocation).title("Campus"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(campusLocation, 15f))
 
+        val RyanBuilding = LatLng(48.42124419010666, -89.25966103909835)
+        mMap.addMarker(MarkerOptions().position(RyanBuilding).title("Ryan Building"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(RyanBuilding, 15f))
+
+        val NursingBuilding = LatLng(48.422251685604195, -89.26054616806964)
+        mMap.addMarker(MarkerOptions().position(NursingBuilding).title("Nursing Building "))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(NursingBuilding, 15f))
+
+        val ChancellorPatersonLibrary = LatLng(48.42066033197862, -89.26021357415442)
+        mMap.addMarker(MarkerOptions().position(ChancellorPatersonLibrary).title("Chancellor Paterson Library"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ChancellorPatersonLibrary, 15f))
+
+        val LakeheadUniversityResidence = LatLng(48.41828922942559, -89.26393111584912)
+        mMap.addMarker(MarkerOptions().position(LakeheadUniversityResidence).title("Lakehead University Residence"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LakeheadUniversityResidence, 15f))
+
+        val LakeheadUniversityCentennialBuilding = LatLng(48.42206131225477, -89.26305246646828)
+        mMap.addMarker(MarkerOptions().position(LakeheadUniversityCentennialBuilding).title("Lakehead University Centennial Building"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LakeheadUniversityCentennialBuilding, 15f))
+
+
         // Check for location permissions
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
             checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
