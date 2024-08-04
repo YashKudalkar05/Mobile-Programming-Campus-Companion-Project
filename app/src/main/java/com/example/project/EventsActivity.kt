@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,14 +19,6 @@ class EventsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_events)
 
         firestore = FirebaseFirestore.getInstance()
-
-        // Setup Toolbar
-//        val toolbar: Toolbar = findViewById(R.id.toolbar)  // Added Toolbar setup
-//        setSupportActionBar(toolbar)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        toolbar.setNavigationOnClickListener {
-//            onBackPressedDispatcher.onBackPressed()
-//        }
 
 
         val fab: FloatingActionButton = findViewById(R.id.fab)

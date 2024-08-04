@@ -21,11 +21,14 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
+        android:background="@color/colorBackground"
         android:contentDescription="Add Event"
-        app:srcCompat="@drawable/ic_add"
+        android:tint="@color/colorOnPrimary"
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"/>
+        app:backgroundTintMode="add"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_add" />
 </RelativeLayout>
