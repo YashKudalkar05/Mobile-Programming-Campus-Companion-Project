@@ -3,11 +3,14 @@ package com.example.project
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -19,6 +22,13 @@ class EventsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_events)
 
         firestore = FirebaseFirestore.getInstance()
+
+        // Setup bottom navigation
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            handleMenuItemClick(menuItem)
+            true
+        }
 
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -52,5 +62,35 @@ class EventsActivity : AppCompatActivity() {
             }
     }
 
+
+
+    private fun handleMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.home -> {
+                // Handle event navigation
+                true
+            }
+            R.id.user_details -> {
+                // Handle study groups navigation
+                true
+            }
+            R.id.logout -> {
+                logout()
+                true
+            }
+            else -> false
+        }
+    }
+    private fun logout() {;
+        val auth = FirebaseAuth.getInstance()
+
+        auth.signOut()
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+        // Navigate back to login activity
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close current activity
+    }
 
 }

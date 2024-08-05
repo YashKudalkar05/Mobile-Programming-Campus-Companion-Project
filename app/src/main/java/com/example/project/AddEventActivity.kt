@@ -1,10 +1,14 @@
 package com.example.project
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AddEventActivity : AppCompatActivity() {
@@ -16,11 +20,12 @@ class AddEventActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
 
         // Initialize UI components for posting events
-        val titleEditText: EditText = findViewById(R.id.titleEditText)
-        val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        val dateEditText: EditText = findViewById(R.id.dateEditText)
-        val timeEditText: EditText = findViewById(R.id.timeEditText)
-        val locationEditText: EditText = findViewById(R.id.locationEditText)
+        // Setup bottom navigation
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            handleMenuItemClick(menuItem)
+            true
+        }
         val postButton: Button = findViewById(R.id.postButton)
 
         postButton.setOnClickListener { postEvent() }
@@ -58,5 +63,35 @@ class AddEventActivity : AppCompatActivity() {
         findViewById<EditText>(R.id.dateEditText).text.clear()
         findViewById<EditText>(R.id.timeEditText).text.clear()
         findViewById<EditText>(R.id.locationEditText).text.clear()
+    }
+
+
+    private fun handleMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.home -> {
+                // Handle event navigation
+                true
+            }
+            R.id.user_details -> {
+                // Handle study groups navigation
+                true
+            }
+            R.id.logout -> {
+                logout()
+                true
+            }
+            else -> false
+        }
+    }
+    private fun logout() {;
+        val auth = FirebaseAuth.getInstance()
+
+        auth.signOut()
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+        // Navigate back to login activity
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close current activity
     }
 }
