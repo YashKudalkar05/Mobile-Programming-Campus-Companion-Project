@@ -1,8 +1,11 @@
 package com.example.project
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +17,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class NavigationActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -35,11 +40,18 @@ class NavigationActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_navigation)
 
         // Setup Toolbar
-        val toolbar: Toolbar = findViewById(R.id.toolbar)  // Added Toolbar setup
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+//        val toolbar: Toolbar = findViewById(R.id.toolbar)  // Added Toolbar setup
+//        setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        toolbar.setNavigationOnClickListener {
+//            onBackPressedDispatcher.onBackPressed()
+//        }
+
+        // Setup bottom navigation
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            handleMenuItemClick(menuItem)
+            true
         }
 
 
@@ -127,5 +139,35 @@ class NavigationActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         // Release resources or data that can be recreated later if needed
+    }
+
+
+    private fun handleMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.home -> {
+                // Handle event navigation
+                true
+            }
+            R.id.user_details -> {
+                // Handle study groups navigation
+                true
+            }
+            R.id.logout -> {
+                logout()
+                true
+            }
+            else -> false
+        }
+    }
+    private fun logout() {;
+        val auth = FirebaseAuth.getInstance()
+
+        auth.signOut()
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+        // Navigate back to login activity
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close current activity
     }
 }

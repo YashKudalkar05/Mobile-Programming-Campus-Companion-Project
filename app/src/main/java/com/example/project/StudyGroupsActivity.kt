@@ -1,6 +1,7 @@
 package com.example.project
 
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class StudyGroupsActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
@@ -22,9 +25,16 @@ class StudyGroupsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_study_groups)
 
         // Initialize Toolbar
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Show the back button
+//        val toolbar: Toolbar = findViewById(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Show the back button
+
+        // Setup bottom navigation
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+            handleMenuItemClick(menuItem)
+            true
+        }
 
 
         firestore = FirebaseFirestore.getInstance()
@@ -46,13 +56,13 @@ class StudyGroupsActivity : AppCompatActivity() {
             // Handle creating a new study group
             createStudyGroup()
         }
-        val toolbar1: Toolbar = findViewById(R.id.toolbar) // Added Toolbar setup
-        setSupportActionBar(toolbar1)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar1.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-        // Fetch and display study groups from Firestore
+//        val toolbar1: Toolbar = findViewById(R.id.toolbar) // Added Toolbar setup
+//        setSupportActionBar(toolbar1)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        toolbar1.setNavigationOnClickListener {
+//            onBackPressedDispatcher.onBackPressed()
+//        }
+        // Fetch and display study groups from Firebase
         updateGroupsList()
     }
 
@@ -150,5 +160,36 @@ class StudyGroupsActivity : AppCompatActivity() {
     private fun getStudentName(): String? {
         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
         return sharedPreferences.getString("student_name", "Unknown User")
+    }
+
+
+
+    private fun handleMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.home -> {
+                // Handle event navigation
+                true
+            }
+            R.id.user_details -> {
+                // Handle study groups navigation
+                true
+            }
+            R.id.logout -> {
+                logout()
+                true
+            }
+            else -> false
+        }
+    }
+    private fun logout() {;
+        val auth = FirebaseAuth.getInstance()
+
+        auth.signOut()
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+        // Navigate back to login activity
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close current activity
     }
 }

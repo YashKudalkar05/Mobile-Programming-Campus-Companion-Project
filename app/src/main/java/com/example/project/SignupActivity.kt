@@ -8,43 +8,38 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity : AppCompatActivity() {
+class SignupActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_signup)
 
         auth = FirebaseAuth.getInstance()
 
         val emailEditText: EditText = findViewById(R.id.emailEditText)
         val passwordEditText: EditText = findViewById(R.id.passwordEditText)
-        val loginButton: Button = findViewById(R.id.loginButton)
         val signupButton: Button = findViewById(R.id.signupButton)
 
-        loginButton.setOnClickListener {
+        signupButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-            login(email, password)
-        }
-
-        signupButton.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
+            signup(email, password)
         }
     }
 
-    private fun login(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
+    private fun signup(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                    // Navigate to the main activity
-                    val intent = Intent(this, MainActivity::class.java)
+                    Toast.makeText(this, "Signup successful", Toast.LENGTH_SHORT).show()
+                    // Navigate back to login activity
+                    val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
-                    finish() // Close com.example.project.LoginActivity
+                    finish() // Close SignupActivity
                 } else {
-                    Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Signup failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
