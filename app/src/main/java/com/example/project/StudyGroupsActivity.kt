@@ -12,22 +12,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
-import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class StudyGroupsActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: StudyGroupAdapter
+    private lateinit var auth: FirebaseAuth
+    private lateinit var studentId: String
+    private lateinit var name: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_study_groups)
 
-        // Initialize Toolbar
-//        val toolbar: Toolbar = findViewById(R.id.toolbar)
-//        setSupportActionBar(toolbar)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Show the back button
 
         // Setup bottom navigation
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
@@ -36,33 +34,44 @@ class StudyGroupsActivity : AppCompatActivity() {
             true
         }
 
-
+        auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // Retrieve student ID and name from SharedPreferences
-        val studentID = getStudentID() ?: "Unknown ID"
-        val studentName = getStudentName() ?: "Unknown User"
+        val user = auth.currentUser
+        user?.let {
+            // Fetch user details from Firestore
+            firestore.collection("users").document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        name = document.getString("name") ?: "N/A"
+                        studentId = document.getString("student_id") ?: "N/A"
+                        initializeUI()
+                    } else {
+                        Toast.makeText(this, "No such user found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
 
-        // Initialize UI components
+        }
+    }
+
+    private fun initializeUI() {
         val createGroupButton: Button = findViewById(R.id.createGroupButton)
         val recyclerView: RecyclerView = findViewById(R.id.groupsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = StudyGroupAdapter(studentID, studentName) { group, join ->
+        adapter = StudyGroupAdapter(studentId, name) { group, join ->
             updateGroupMembership(group, join)
         }
         recyclerView.adapter = adapter
 
         createGroupButton.setOnClickListener {
-            // Handle creating a new study group
+
             createStudyGroup()
         }
-//        val toolbar1: Toolbar = findViewById(R.id.toolbar) // Added Toolbar setup
-//        setSupportActionBar(toolbar1)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        toolbar1.setNavigationOnClickListener {
-//            onBackPressedDispatcher.onBackPressed()
-//        }
-        // Fetch and display study groups from Firebase
+
         updateGroupsList()
     }
 
@@ -71,18 +80,18 @@ class StudyGroupsActivity : AppCompatActivity() {
         val subjectEditText: EditText = findViewById(R.id.groupSubjectEditText)
         val descriptionEditText: EditText = findViewById(R.id.descriptionEditText)
 
-        val name = groupNameEditText.text.toString()
+        val groupname = groupNameEditText.text.toString()
         val subject = subjectEditText.text.toString()
         val description = descriptionEditText.text.toString()
 
-        val currentStudentID = getStudentID() ?: return
-        val currentUserName = getStudentName() ?: "Unknown User"
+        //val currentStudentID = studentId
+        val currentUserName = name
 
         val studyGroup = StudyGroupAdapter.StudyGroup(
-            name = name,
+            name = groupname,
             subject = subject,
             description = description,
-            members = listOf(currentUserName) // Add the current user to the group
+            members = listOf(currentUserName)
         )
 
         firestore.collection("studyGroups")
@@ -119,14 +128,13 @@ class StudyGroupsActivity : AppCompatActivity() {
     }
 
     private fun updateGroupMembership(group: StudyGroupAdapter.StudyGroup, join: Boolean) {
-        val currentStudentID = getStudentID() ?: return // Retrieve the current student ID
         val groupRef = firestore.collection("studyGroups").document(group.groupID) // Use group ID
 
         firestore.runTransaction { transaction ->
             val updatedGroup = transaction.get(groupRef).toObject(StudyGroupAdapter.StudyGroup::class.java)
                 ?: throw IllegalStateException("Group not found")
 
-            val currentUserName = getStudentName() ?: "Unknown User" // Assuming you have a function to get the student's name
+            val currentUserName = name ?: "Unknown User" // Assuming you have a function to get the student's name
 
             val updatedMembers = if (join) {
                 updatedGroup.members.toMutableList().apply { add(currentUserName) }
@@ -151,17 +159,6 @@ class StudyGroupsActivity : AppCompatActivity() {
             Toast.makeText(this, "Failed to update group membership: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun getStudentID(): String? {
-        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        return sharedPreferences.getString("student_id", null)
-    }
-
-    private fun getStudentName(): String? {
-        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        return sharedPreferences.getString("student_name", "Unknown User")
-    }
-
 
 
     private fun handleMenuItemClick(item: MenuItem): Boolean {
