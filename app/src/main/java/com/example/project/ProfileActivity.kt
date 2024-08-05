@@ -4,67 +4,63 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AddEventActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.new_event)
+        setContentView(R.layout.activity_profile)
+
+        auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // Initialize UI components for posting events
-        // Setup bottom navigation
+        val nameTextView: TextView = findViewById(R.id.nameTextView)
+        val emailTextView: TextView = findViewById(R.id.emailTextView)
+        val programTextView: TextView = findViewById(R.id.programTextView)
+        val studentIdTextView: TextView = findViewById(R.id.studentIdTextView)
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
             handleMenuItemClick(menuItem)
             true
         }
-        val postButton: Button = findViewById(R.id.postButton)
 
-        postButton.setOnClickListener { postEvent() }
+        // Get current user
+        val user = auth.currentUser
+        user?.let {
+            // Fetch user details from Firestore
+            firestore.collection("users").document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val name = document.getString("name") ?: "N/A"
+                        val email = document.getString("email") ?: "N/A"
+                        val program = document.getString("program") ?: "N/A"
+                        val studentId = document.getString("student_id") ?: "N/A"
 
+                        // Update UI with user details
+                        nameTextView.text = "Name: $name"
+                        emailTextView.text = "Email: $email"
+                        programTextView.text = "Program: $program"
+                        studentIdTextView.text = "Student Id: $studentId"
+                    } else {
+                        Toast.makeText(this, "No such user found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+
+        }
     }
-    private fun postEvent() {
-        val title = findViewById<EditText>(R.id.titleEditText).text.toString()
-        val description = findViewById<EditText>(R.id.descriptionEditText).text.toString()
-        val date = findViewById<EditText>(R.id.dateEditText).text.toString()
-        val time = findViewById<EditText>(R.id.timeEditText).text.toString()
-        val location = findViewById<EditText>(R.id.locationEditText).text.toString()
-
-        val event = hashMapOf(
-            "title" to title,
-            "description" to description,
-            "date" to date,
-            "time" to time,
-            "location" to location
-        )
-
-        firestore.collection("events")
-            .add(event)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Event posted successfully", Toast.LENGTH_SHORT).show()
-                clearFields()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to post event", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun clearFields() {
-        findViewById<EditText>(R.id.titleEditText).text.clear()
-        findViewById<EditText>(R.id.descriptionEditText).text.clear()
-        findViewById<EditText>(R.id.dateEditText).text.clear()
-        findViewById<EditText>(R.id.timeEditText).text.clear()
-        findViewById<EditText>(R.id.locationEditText).text.clear()
-    }
-
 
     private fun handleMenuItemClick(item: MenuItem): Boolean {
         return when (item.itemId) {

@@ -140,16 +140,15 @@ class NavigationActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onLowMemory()
         // Release resources or data that can be recreated later if needed
     }
-
-
     private fun handleMenuItemClick(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.home -> {
-                // Handle event navigation
+                home()
                 true
             }
             R.id.user_details -> {
                 // Handle study groups navigation
+                profile()
                 true
             }
             R.id.logout -> {
@@ -167,6 +166,18 @@ class NavigationActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Navigate back to login activity
         val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Close current activity
+    }
+    private fun home() {;
+        // Navigate back to login activity
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // Close current activity
+    }
+    private fun profile() {;
+        // Navigate back to login activity
+        val intent = Intent(this, ProfileActivity::class.java)
         startActivity(intent)
         finish() // Close current activity
     }

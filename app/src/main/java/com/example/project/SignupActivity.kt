@@ -25,6 +25,7 @@ class SignupActivity : AppCompatActivity() {
         val emailEditText: EditText = findViewById(R.id.emailEditText)
         val passwordEditText: EditText = findViewById(R.id.passwordEditText)
         val programEditText: EditText = findViewById(R.id.programEditText)
+        val studentIdEditText: EditText = findViewById(R.id.studentIdEditText)
         val signupButton: Button = findViewById(R.id.signupButton)
 
         signupButton.setOnClickListener {
@@ -32,11 +33,12 @@ class SignupActivity : AppCompatActivity() {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             val program = programEditText.text.toString()
-            signup(name, email, password, program)
+            val studentId = studentIdEditText.text.toString()
+            signup(name, email, password, program, studentId)
         }
     }
 
-    private fun signup(name: String, email: String, password: String, program: String) {
+    private fun signup(name: String, email: String, password: String, program: String, studentId: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -45,7 +47,8 @@ class SignupActivity : AppCompatActivity() {
                         val userData = hashMapOf(
                             "name" to name,
                             "email" to email,
-                            "program" to program
+                            "program" to program,
+                            "student_id" to studentId
                         )
 
                         firestore.collection("users").document(user.uid)
