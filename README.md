@@ -12,11 +12,13 @@ Welcome to the Lakehead Buddy App! This application is designed to enhance your 
 - **User Profile:** View and manage your profile information.
 - **User Authentication:** Secure login and signup using Firebase.
 
-## Screenshots
+## Demo
 
 <video width="320" height="240" controls>
   <source src="Demo Video.mp4" type="video/mp4">
 </video>
+
+![Test](Demo Video.mp4)
 
 ## Installation
 
