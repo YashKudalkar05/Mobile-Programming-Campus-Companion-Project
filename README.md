@@ -14,11 +14,9 @@ Welcome to the Lakehead Buddy App! This application is designed to enhance your 
 
 ## Demo
 
-<video width="320" height="240" controls>
-  <source src="Demo Video.mp4" type="video/mp4">
-</video>
+<img src="https://github.com/user-attachments/assets/4ac54ec0-5e6a-4e9e-ad3e-bfeea0cf0b4e" width=250 height=500></img>
 
-![Test](Demo Video.mp4)
+
 
 ## Installation
 
