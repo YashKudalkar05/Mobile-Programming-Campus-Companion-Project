@@ -14,7 +14,9 @@ Welcome to the Lakehead Buddy App! This application is designed to enhance your 
 
 ## Screenshots
 
-
+<video width="320" height="240" controls>
+  <source src="Demo Video.mp4" type="video/mp4">
+</video>
 
 ## Installation
 
