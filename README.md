@@ -83,26 +83,35 @@ Users can log out by clicking the logout button in the bottom navigation bar.
 
 ### Activities
 
-- `MainActivity.kt`: The main activity that hosts the fragments.
+- `AddEventActivity.kt`: Handles adding new events.
+- `EventsActivity.kt`: Displays a list of upcoming events.
 - `LoginActivity.kt`: Handles user login.
+- `MainActivity.kt`: The main activity that hosts the bottom navigation.
+- `NavigationActivity.kt`: Provides campus navigation.
+- `ProfileActivity.kt`: Displays user profile information.
 - `SignupActivity.kt`: Handles user signup.
+- `StudyGroupsActivity.kt`: Displays a list of study groups.
 
-### Fragments
+### Adapters
 
-- `EventsFragment.kt`: Displays a list of upcoming events.
-- `StudyGroupsFragment.kt`: Displays a list of study groups.
-- `NavigationFragment.kt`: Provides campus navigation.
-- `ProfileFragment.kt`: Displays user profile information.
+- `EventAdapter.kt`: Adapter for displaying event items.
+- `StudyGroupAdapter.kt`: Adapter for displaying study group items.
 
 ### Layouts
 
-- `activity_main.xml`: The main activity layout.
+- `activity_events.xml`: The events activity layout.
 - `activity_login.xml`: The login activity layout.
+- `activity_main.xml`: The main activity layout.
+- `activity_navigation.xml`: The navigation activity layout.
+- `activity_profile.xml`: The profile activity layout.
 - `activity_signup.xml`: The signup activity layout.
-- `fragment_events.xml`: The events fragment layout.
-- `fragment_study_groups.xml`: The study groups fragment layout.
-- `fragment_navigation.xml`: The navigation fragment layout.
-- `fragment_profile.xml`: The profile fragment layout.
+- `activity_study_groups.xml`: The study groups activity layout.
+- `item_event.xml`: Layout for an individual event item.
+- `item_study_group.xml`: Layout for an individual study group item.
+- `new_event.xml`: Layout for adding a new event.
+
+### Menu
+
 - `bottom_nav_menu.xml`: The bottom navigation menu.
 
 ### Styles
